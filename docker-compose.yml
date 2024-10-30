@@ -11,7 +11,7 @@ services:
       - banco
       - rabbitmq
     networks:
-      rede_web:
+      venda_passagem:
         ipv4_address: 192.168.1.10
 
   frontend:
@@ -21,7 +21,7 @@ services:
     container_name: frontend
     privileged: true
     networks:
-      rede_web:
+      venda_passagem:
         ipv4_address: 192.168.1.11
 
   banco:
@@ -29,12 +29,12 @@ services:
     container_name: banco
     privileged: true
     networks:
-      rede_web:
+      venda_passagem:
         ipv4_address: 192.168.1.12
     environment:
-      POSTGRES_USER: "user"
-      POSTGRES_PASSWORD: "password"
-      POSTGRES_DB: "dbname"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "170112345"
+      POSTGRES_DB: "db_passagem"
     ports:
       - "5432:5432"
 
@@ -43,14 +43,14 @@ services:
     container_name: rabbitmq
     privileged: true
     networks:
-      rede_web:
+      venda_passagem:
         ipv4_address: 192.168.1.13
     ports:
       - "5672:5672"     # Porta padrão do RabbitMQ
       - "15672:15672"   # Porta da interface de administração
 
 networks:
-  rede_web:
+  venda_passagem:
     driver: bridge
     ipam:
       config:
