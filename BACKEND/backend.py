@@ -1,5 +1,6 @@
 # backend.py
 from flask import Flask, jsonify
+from flask_cors import CORS
 import threading
 import queue
 import random
