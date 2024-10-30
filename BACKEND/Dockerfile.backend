@@ -1,0 +1,19 @@
+# Dockerfile.backend
+
+# Usando uma imagem Python base
+FROM python:3.12-slim
+
+# Define o diretório de trabalho dentro do container
+WORKDIR /app
+
+# Copia os arquivos do projeto para o container
+COPY . /app
+
+# Instala as dependências necessárias
+RUN pip install --no-cache-dir PyQt5 Faker
+
+# Expor a porta que o backend irá usar (modifique caso precise de outra porta)
+EXPOSE 5000
+
+# Comando para iniciar o backend
+CMD ["python", "seu_arquivo_backend.py"]

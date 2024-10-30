@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: . 
+      dockerfile: Dockerfile.backend
+    container_name: backend
+    privileged: true
+    depends_on:
+      - banco
+      - rabbitmq
+    networks:
+      rede_web:
+        ipv4_address: 192.168.1.10
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: frontend
+    privileged: true
+    networks:
+      rede_web:
+        ipv4_address: 192.168.1.11
+
+  banco:
+    image: postgres:13
+    container_name: banco
+    privileged: true
+    networks:
+      rede_web:
+        ipv4_address: 192.168.1.12
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "dbname"
+    ports:
+      - "5432:5432"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    privileged: true
+    networks:
+      rede_web:
+        ipv4_address: 192.168.1.13
+    ports:
+      - "5672:5672"     # Porta padrão do RabbitMQ
+      - "15672:15672"   # Porta da interface de administração
+
+networks:
+  rede_web:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
