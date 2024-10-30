@@ -13,4 +13,4 @@ COPY . /app
 RUN pip install --no-cache-dir PyQt5 Faker
 
 # Comando para iniciar o frontend
-CMD ["python", "seu_arquivo_frontend.py"]
+CMD ["python", "frontend.py"]

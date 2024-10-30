@@ -10,10 +10,10 @@ WORKDIR /app
 COPY . /app
 
 # Instala as dependências necessárias
-RUN pip install --no-cache-dir PyQt5 Faker
+RUN pip install --no-cache-dir Flask Faker
 
-# Expor a porta que o backend irá usar (modifique caso precise de outra porta)
+# Expor a porta que o backend irá usar
 EXPOSE 5000
 
 # Comando para iniciar o backend
-CMD ["python", "seu_arquivo_backend.py"]
+CMD ["python", "backend.py"]

@@ -3,20 +3,18 @@ version: '3.8'
 services:
   backend:
     build:
-      context: ./BACKEND            # Caminho da pasta onde está o Dockerfile.backend
+      context: ./BACKEND
       dockerfile: Dockerfile.backend
     container_name: backend
-    privileged: true
     networks:
       venda_passagem:
         ipv4_address: 192.168.1.10
 
   frontend:
     build:
-      context: ./FRONTEND           # Caminho da pasta onde está o Dockerfile.frontend
+      context: ./FRONTEND
       dockerfile: Dockerfile.frontend
     container_name: frontend
-    privileged: true
     networks:
       venda_passagem:
         ipv4_address: 192.168.1.11
@@ -25,10 +23,9 @@ services:
     image: postgres:13
     container_name: banco
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "170112345"
-      POSTGRES_DB: "db_passagem"
-    privileged: true
+      POSTGRES_USER: "${POSTGRES_USER:-postgres}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-defaultpassword}"
+      POSTGRES_DB: "${POSTGRES_DB:-db_passagem}"
     networks:
       venda_passagem:
         ipv4_address: 192.168.1.12
