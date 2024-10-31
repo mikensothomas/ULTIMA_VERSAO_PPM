@@ -10,7 +10,10 @@ WORKDIR /app
 COPY . /app
 
 # Instala as dependências necessárias
-RUN pip install --no-cache-dir PyQt5 Faker
+RUN pip install --no-cache-dir PyQt5 Faker requests
+
+# Expor a porta que o frontend irá usar (opcional)
+EXPOSE 3000
 
 # Comando para iniciar o frontend
 CMD ["python", "frontend.py"]

@@ -51,6 +51,7 @@ services:
 
 networks:
   venda_passagem:
+    name: venda_passagem  # Define o nome fixo da rede
     driver: bridge
     ipam:
       config:

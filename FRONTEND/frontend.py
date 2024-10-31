@@ -64,6 +64,9 @@ class PassagensUI(QMainWindow):
     def atualizar_interface(self):
         # Obter dados do backend
         try:
+            # resposta = requests.get("http://backend:5000/filas")
+            # estado = resposta.json()
+
             resposta = requests.get("http://backend:5000/filas")
             estado = resposta.json()
             
