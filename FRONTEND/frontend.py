@@ -1,4 +1,6 @@
 import sys
+import os
+os.environ["QT_QPA_PLATFORM"] = "offscreen"  # Modo offscreen para evitar problemas de display
 import requests
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QLabel, QProgressBar, QWidget, QTableWidget, QTableWidgetItem, QHeaderView, QScrollArea
 from PyQt5.QtCore import QTimer
