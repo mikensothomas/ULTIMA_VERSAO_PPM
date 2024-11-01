@@ -35,7 +35,7 @@ def gerar_dados_passagem(id):
 # Funções de processamento paralelo
 def demandas_recebidas():
     id = 1
-    for _ in range(50):
+    for _ in range(500):
         dados_passagem = gerar_dados_passagem(id)
         fila_entrada.put(dados_passagem)
         id += 1
