@@ -50,7 +50,7 @@ def distribuir_demandas():
             filas_processamento[idx].put(dados)
             contadores_filas[idx] += 1
             idx = (idx + 1) % 4
-        time.sleep(1)
+        time.sleep(2)
 
 def liberar_fila(fila, fila_saida, index):
     while True:
@@ -59,7 +59,7 @@ def liberar_fila(fila, fila_saida, index):
             fila.task_done()
             fila_saida.put(dados)
             contadores_filas[index] -= 1
-        time.sleep(10)
+        time.sleep(20)
 
 # Rota para obter o estado das filas
 @app.route('/filas', methods=['GET'])
