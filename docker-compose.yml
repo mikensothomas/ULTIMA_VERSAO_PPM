@@ -25,13 +25,29 @@ services:
     ports:
       - "3000:3000"  # Mapeando a porta 3000 do frontend
 
+  # banco:
+  #   build: 
+  #     context: ./DB
+  #     dockerfile: Dockerfile.banco
+  #   image: postgres:13
+  #   container_name: banco
+  #   environment:
+  #     POSTGRES_USER: "${POSTGRES_USER:-postgres}"
+  #     POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-12345}"
+  #     POSTGRES_DB: "${POSTGRES_DB:-db_passagem}"
+  #   privileged: true
+  #   networks:
+  #     venda_passagem:
+  #       ipv4_address: 192.168.1.12
+  #   ports:
+  #     - "5432:5432"
+
   banco:
-    image: postgres:13
+    build:
+      context: ./DB
+      dockerfile: Dockerfile.banco
     container_name: banco
-    environment:
-      POSTGRES_USER: "${POSTGRES_USER:-postgres}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-defaultpassword}"
-      POSTGRES_DB: "${POSTGRES_DB:-db_passagem}"
+    image: postgres:13
     privileged: true
     networks:
       venda_passagem:
