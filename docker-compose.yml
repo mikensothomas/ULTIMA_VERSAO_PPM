@@ -11,7 +11,7 @@ services:
       venda_passagem:
         ipv4_address: 192.168.1.10
     ports:
-      - "5000:5000"  # Mapeando a porta 5000 do backend
+      - "5000:5000"
 
   frontend:
     build:
@@ -23,25 +23,7 @@ services:
       venda_passagem:
         ipv4_address: 192.168.1.11
     ports:
-      - "3000:3000"  # Mapeando a porta 3000 do frontend
-
-  # banco:
-  #   build: 
-  #     context: ./DB
-  #     dockerfile: Dockerfile.banco
-  #   image: postgres:13
-  #   container_name: banco
-  #   environment:
-  #     POSTGRES_USER: "${POSTGRES_USER:-postgres}"
-  #     POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-12345}"
-  #     POSTGRES_DB: "${POSTGRES_DB:-db_passagem}"
-  #   privileged: true
-  #   networks:
-  #     venda_passagem:
-  #       ipv4_address: 192.168.1.12
-  #   ports:
-  #     - "5432:5432"
-
+      - "3000:3000"
   banco:
     build:
       context: ./DB
@@ -67,7 +49,7 @@ services:
 
 networks:
   venda_passagem:
-    name: venda_passagem  # Define o nome fixo da rede
+    name: venda_passagem
     driver: bridge
     ipam:
       config:
