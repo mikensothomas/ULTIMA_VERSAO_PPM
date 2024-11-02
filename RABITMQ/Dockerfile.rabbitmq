@@ -1,0 +1,8 @@
+# Dockerfile.rabbitmq
+FROM rabbitmq:3-management
+
+# Definindo o usuário e a senha padrão do RabbitMQ
+ENV RABBITMQ_DEFAULT_USER=usuario \
+    RABBITMQ_DEFAULT_PASS=12345
+
+EXPOSE 5672 15672

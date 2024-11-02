@@ -39,7 +39,9 @@ services:
       - "5432:5432"
 
   rabbitmq:
-    image: rabbitmq:3-management
+    build:
+      context: ./RABITMQ
+      dockerfile: Dockerfile.rabbitmq
     container_name: rabbitmq
     networks:
       venda_passagem:
