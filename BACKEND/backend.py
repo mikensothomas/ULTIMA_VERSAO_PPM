@@ -148,32 +148,40 @@ contadores_filas = [0] * 4
 
 # Conexão com o banco de dados
 def conectar_banco():
-    return psycopg2.connect(
-        host="banco",
-        database="dados_passagem",
-        user="postgres",
-        password="postgres"
-    )
+    try:
+        conn = psycopg2.connect(
+            host="banco",
+            database="dados_passagem",
+            user="usuario",
+            password="12345"
+        )
+        return conn
+    except Exception as e:
+        print("Erro ao conectar ao banco de dados:", e)
+        return None
 
 # Função para inserir no banco
 def inserir_dados_banco(dados):
     try:
         conn = conectar_banco()
-        with conn.cursor() as cur:
-            query = sql.SQL("""
-                INSERT INTO dados_passagem (id, nome, cpf, data, hora, assento)
-                VALUES (%s, %s, %s, %s, %s, %s)
-                ON CONFLICT (id) DO NOTHING
-            """)
-            cur.execute(query, (
-                dados['ID'], dados['nome'], dados['cpf'],
-                dados['data'], dados['hora'], dados['assento']
-            ))
-        conn.commit()
+        if conn:
+            with conn.cursor() as cur:
+                query = sql.SQL("""
+                    INSERT INTO dados_passagem (id, nome, cpf, data, hora, assento)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (id) DO NOTHING
+                """)
+                cur.execute(query, (
+                    dados['ID'], dados['nome'], dados['cpf'],
+                    dados['data'], dados['hora'], dados['assento']
+                ))
+            conn.commit()
+            print(f"Registro inserido no banco para o ID {dados['ID']}")
     except Exception as e:
         print("Erro ao inserir dados no banco de dados:", e)
     finally:
-        conn.close()
+        if conn:
+            conn.close()
 
 # Função para gerar dados de passagem
 def gerar_dados_passagem(id):
@@ -195,27 +203,28 @@ def demandas_recebidas():
     for _ in range(50):
         dados_passagem = gerar_dados_passagem(id)
         fila_entrada.put(dados_passagem)
+        print(f"Adicionado na fila de entrada: ID {id}")
         id += 1
-        time.sleep(1)
+        time.sleep(2)  # Tempo reduzido para testar a inserção
 
 def distribuir_demandas():
     idx = 0
     while True:
         if not fila_entrada.empty():
             dados = fila_entrada.get()
-            fila_entrada.task_done()
             filas_processamento[idx].put(dados)
             contadores_filas[idx] += 1
+            print(f"Distribuído para fila de processamento {idx + 1}: ID {dados['ID']}")
             idx = (idx + 1) % 4
-        time.sleep(2)
+        time.sleep(4)
 
 def liberar_fila(fila, fila_saida, index):
     while True:
         if not fila.empty():
             dados = fila.get()
-            fila.task_done()
             fila_saida.put(dados)
             contadores_filas[index] -= 1
+            print(f"Liberado para fila de saída: ID {dados['ID']}")
             inserir_dados_banco(dados)
         time.sleep(10)
 
