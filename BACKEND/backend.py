@@ -200,12 +200,12 @@ def gerar_dados_passagem(id):
 # Funções de processamento paralelo
 def demandas_recebidas():
     id = 1
-    for _ in range(50):
+    for _ in range(500):
         dados_passagem = gerar_dados_passagem(id)
         fila_entrada.put(dados_passagem)
         print(f"Adicionado na fila de entrada: ID {id}")
         id += 1
-        time.sleep(2)  # Tempo reduzido para testar a inserção
+        time.sleep(1)  # Tempo reduzido para testar a inserção
 
 def distribuir_demandas():
     idx = 0
@@ -216,7 +216,7 @@ def distribuir_demandas():
             contadores_filas[idx] += 1
             print(f"Distribuído para fila de processamento {idx + 1}: ID {dados['ID']}")
             idx = (idx + 1) % 4
-        time.sleep(4)
+        time.sleep(2)
 
 def liberar_fila(fila, fila_saida, index):
     while True:
