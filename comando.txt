@@ -1,0 +1,7 @@
+http://localhost:15672
+
+psql -h localhost -p 5432 -U usuario -d dados_passagem
+
+docker exec -it banco /bin/bash
+
+psql -U usuario -d dados_passagem
