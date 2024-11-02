@@ -10,7 +10,7 @@ WORKDIR /app
 COPY . /app
 
 # Instala as dependências necessárias
-RUN pip install --no-cache-dir Flask Faker flask_cors
+RUN pip install --no-cache-dir Flask Faker flask_cors psycopg2-binary
 
 # Expor a porta que o backend irá usar
 EXPOSE 5000
