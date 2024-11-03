@@ -7,3 +7,5 @@ docker exec -it banco /bin/bash
 psql -U usuario -d dados_passagem
 
 \! clear
+
+docker system prune -a --volumes
