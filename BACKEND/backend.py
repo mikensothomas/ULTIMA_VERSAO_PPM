@@ -104,7 +104,7 @@ def demandas_recebidas():
         id += 1
 
         # Checar se precisamos de uma nova fila de processamento
-        if fila_entrada.qsize() // 100 + 1 > len(filas_processamento):
+        if fila_entrada.qsize() // 20 + 1 > len(filas_processamento):
             # Criar nova fila e contador para a nova fila de processamento
             nova_fila = queue.Queue(maxsize=10)
             filas_processamento.append(nova_fila)
