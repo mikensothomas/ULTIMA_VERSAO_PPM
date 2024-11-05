@@ -458,7 +458,7 @@ def completar_dados_passagem(dados):
 
 def demandas_recebidas():
     id = 1
-    for _ in range(110):  # Limite de 100 demandas para teste
+    for _ in range(50):  # Limite de 100 demandas para teste
         dados_passagem = gerar_dados_passagem_inicial(id)
         fila_entrada.put(dados_passagem)
         enviar_para_fila_rabbitmq("fila_entrada", dados_passagem)
