@@ -72,7 +72,7 @@ def inserir_dados_banco(dados):
                 """)
                 cur.execute(query, (
                     dados['ID'], dados['nome'], dados['cpf'],
-                    dados['data'], dados['hora'], dados['assento']
+                    dados.get('data'), dados.get('hora'), dados.get('assento')
                 ))
             conn.commit()
     except Exception as e:
@@ -81,23 +81,28 @@ def inserir_dados_banco(dados):
         if conn:
             conn.close()
 
-def gerar_dados_passagem(id):
-    data_atual = date.today()
-    dias_aleatorios = random.randrange(365)
-    data_em_texto = (data_atual + timedelta(days=dias_aleatorios)).strftime("%Y-%m-%d")
+# Função para gerar dados iniciais (apenas ID, Nome, CPF)
+def gerar_dados_passagem_inicial(id):
     return {
         "ID": id,
         "nome": dados_falsos.name(),
-        "cpf": dados_falsos.cpf(),
-        "data": data_em_texto,
-        "hora": dados_falsos.time(),
-        "assento": random.randint(1, 100)
+        "cpf": dados_falsos.cpf()
     }
+
+# Função para gerar os campos adicionais (Data, Hora, Assento) após o processamento
+def completar_dados_passagem(dados):
+    data_atual = date.today()
+    dias_aleatorios = random.randrange(365)
+    data_em_texto = (data_atual + timedelta(days=dias_aleatorios)).strftime("%Y-%m-%d")
+    dados["data"] = data_em_texto
+    dados["hora"] = dados_falsos.time()
+    dados["assento"] = random.randint(1, 100)
+    return dados
 
 def demandas_recebidas():
     id = 1
     while True:
-        dados_passagem = gerar_dados_passagem(id)
+        dados_passagem = gerar_dados_passagem_inicial(id)
         fila_entrada.put(dados_passagem)
         enviar_para_fila_rabbitmq("fila_entrada", dados_passagem)
         print(f"Adicionado na fila de entrada: ID {id}")
@@ -105,11 +110,9 @@ def demandas_recebidas():
 
         # Checar se precisamos de uma nova fila de processamento
         if fila_entrada.qsize() // 20 + 1 > len(filas_processamento):
-            # Criar nova fila e contador para a nova fila de processamento
             nova_fila = queue.Queue(maxsize=10)
             filas_processamento.append(nova_fila)
             contadores_filas.append(0)
-            # Iniciar uma nova thread para gerenciar a nova fila de processamento
             threading.Thread(target=liberar_fila, args=(nova_fila, len(filas_processamento) - 1), daemon=True).start()
             print(f"Criada nova fila de processamento. Total de filas: {len(filas_processamento)}")
 
@@ -132,11 +135,12 @@ def liberar_fila(fila, index):
     while True:
         if not fila.empty():
             dados = fila.get()
-            fila_saida.put(dados)
-            enviar_para_fila_rabbitmq("fila_saida", dados)
+            dados_completos = completar_dados_passagem(dados)
+            fila_saida.put(dados_completos)
+            enviar_para_fila_rabbitmq("fila_saida", dados_completos)
             contadores_filas[index] -= 1
-            print(f"Liberado para fila de saída: ID {dados['ID']}")
-            inserir_dados_banco(dados)
+            print(f"Liberado para fila de saída: ID {dados_completos['ID']}")
+            inserir_dados_banco(dados_completos)
         time.sleep(2)
 
 @app.route('/filas', methods=['GET'])
