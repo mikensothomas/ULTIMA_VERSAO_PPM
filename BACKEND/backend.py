@@ -19,13 +19,11 @@ consumidor_threads = []
 
 dados_falsos = Faker('pt_BR')
 
-# Filas internas para simulação
 fila_entrada = queue.Queue()
 fila_saida = queue.Queue()
 filas_processamento = [queue.Queue(maxsize=10)]
 contadores_filas = [0]
 
-# Configuração do RabbitMQ
 RABBITMQ_USER = 'usuario'
 RABBITMQ_PASS = '12345'
 RABBITMQ_HOST = 'rabbitmq'
@@ -113,7 +111,7 @@ def demandas_recebidas():
 
 def ajustar_filas_processamento():
     demandas_na_entrada = fila_entrada.qsize()
-    filas_necessarias = demandas_na_entrada // 10 + 1  # 1 fila para cada 10 demandas na entrada
+    filas_necessarias = demandas_na_entrada // 10 + 1
 
     while len(filas_processamento) < filas_necessarias:
         nova_fila = queue.Queue(maxsize=10)
@@ -131,7 +129,7 @@ def ajustar_filas_processamento():
 def monitorar_filas():
     while True:
         ajustar_filas_processamento()
-        time.sleep(2)  # Intervalo de monitoramento
+        time.sleep(2)
 
 def distribuir_demandas():
     idx = 0
