@@ -100,7 +100,7 @@ def completar_dados_passagem(dados):
 
 def demandas_recebidas():
     id = 1
-    for _ in range(100):
+    for _ in range(50):
     # while True:
         dados_passagem = gerar_dados_passagem_inicial(id)
         fila_entrada.put(dados_passagem)
