@@ -50,7 +50,7 @@ class PassagensUI(QMainWindow):
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.atualizar_interface)
-        self.timer.start(500)  # Atualização a cada meio segundo
+        self.timer.start(500)
 
     def atualizar_interface(self):
         try:
