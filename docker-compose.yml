@@ -39,17 +39,17 @@ services:
       - "5432:5432"
 
   rabbitmq:
-    image: rabbitmq:3-management  # Usa a imagem oficial com interface de gerenciamento
+    image: rabbitmq:3-management
     container_name: rabbitmq
     environment:
-      - RABBITMQ_DEFAULT_USER=usuario  # Define o usuário padrão
-      - RABBITMQ_DEFAULT_PASS=12345    # Define a senha padrão
+      - RABBITMQ_DEFAULT_USER=usuario
+      - RABBITMQ_DEFAULT_PASS=12345
     networks:
       venda_passagem:
         ipv4_address: 192.168.1.13
     ports:
-      - "5672:5672"   # Porta para conexões AMQP
-      - "15672:15672" # Porta para interface de gerenciamento
+      - "5672:5672"
+      - "15672:15672"
 
 networks:
   venda_passagem:
