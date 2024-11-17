@@ -14,9 +14,6 @@ from datetime import date, timedelta
 app = Flask(__name__)
 CORS(app)
 
-# lock = threading.Lock()
-# consumidor_threads = []
-
 dados_falsos = Faker('pt_BR')
 
 fila_entrada = queue.Queue()
