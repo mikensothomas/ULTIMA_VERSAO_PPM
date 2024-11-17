@@ -9,7 +9,3 @@ psql -U usuario -d dados_passagem
 \! clear
 
 docker system prune -a --volumes
-
-docker-compose build
-
-docker-compose up -d

@@ -61,27 +61,6 @@ def conectar_banco():
         print("Erro ao conectar ao banco de dados:", e)
         return None
 
-def inserir_dados_banco(dados):
-    try:
-        conn = conectar_banco()
-        if conn:
-            with conn.cursor() as cur:
-                query = sql.SQL("""
-                    INSERT INTO dados_passagem (id, nome, cpf, data, hora, assento)
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                    ON CONFLICT (id) DO NOTHING
-                """)
-                cur.execute(query, (
-                    dados['ID'], dados['nome'], dados['cpf'],
-                    dados.get('data'), dados.get('hora'), dados.get('assento')
-                ))
-            conn.commit()
-    except Exception as e:
-        print("Erro ao inserir dados no banco de dados:", e)
-    finally:
-        if conn:
-            conn.close()
-
 def gerar_dados_passagem_inicial(id):
     return {
         "ID": id,
@@ -143,6 +122,27 @@ def distribuir_demandas():
             print(f"Distribuído para fila de processamento {idx + 1}: ID {dados['ID']}")
             idx = (idx + 1) % len(filas_processamento)
         time.sleep(1)
+
+def inserir_dados_banco(dados):
+    try:
+        conn = conectar_banco()
+        if conn:
+            with conn.cursor() as cur:
+                query = sql.SQL("""
+                    INSERT INTO dados_passagem (id, nome, cpf, data, hora, assento)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (id) DO NOTHING
+                """)
+                cur.execute(query, (
+                    dados['ID'], dados['nome'], dados['cpf'],
+                    dados.get('data'), dados.get('hora'), dados.get('assento')
+                ))
+            conn.commit()
+    except Exception as e:
+        print("Erro ao inserir dados no banco de dados:", e)
+    finally:
+        if conn:
+            conn.close()
 
 def liberar_fila(fila, index):
     while True:
